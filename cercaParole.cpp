@@ -6,39 +6,67 @@
 
 using namespace std;
 
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
 int main() {
     string parola;
     while (true) {
-        cout << "Inserisci una parola da cercare (o EXIT per uscire): " <<endl;
-        getline(cin, parola);
+        // Chiedo all'utente una parola da cercare
+        cout << "Inserisci una parola da cercare (digita EXIT per uscire): "<<endl;
+        cin >> parola;
         if (parola == "EXIT") {
-            break;
+            break; // Esco dal ciclo while se l'utente digita EXIT
         }
+        // Apro il file da cercare
         ifstream file("../maggio.txt");
-        if (!file) {
-            cout << "Impossibile aprire il file!" << endl;
-            return 1;
+        if (!file.is_open()) {
+            cout << "Impossibile aprire il file." << endl;
+            continue; // Torna all'inizio del ciclo while
         }
+        // Cerco la parola nel file e stampo le righe in cui appare
         string riga;
         int numeroRiga = 1;
         bool trovata = false;
         while (getline(file, riga)) {
             if (riga.find(parola) != string::npos) {
+                cout << "Parola trovata alla riga " << numeroRiga << ": " << riga << endl;
                 trovata = true;
-                cout << "La parola '" << parola << "' è presente alla riga " << numeroRiga << ": " << riga << endl;
-                int i = 1;
-                while (getline(file, riga) && !riga.empty()) {
-                    cout << numeroRiga + i<< ": " << riga << endl;
-                    i++;
+                // Stampo le righe precedenti finché non si trova una riga vuota
+                int righePrecedenti = numeroRiga - 1;
+                while (righePrecedenti > 0) {
+                    string rigaPrima;
+                    
+                    for (int i = 1; i < righePrecedenti; i++) {
+                        getline(file, rigaPrima);
+                    }
+                    getline(file, rigaPrima);
+                    if (rigaPrima.empty()) {
+                        break;
+                    }
+                    cout << "Riga " << righePrecedenti << ": " << rigaPrima << endl;
+                    righePrecedenti--;
                 }
-                break;
+                // Stampo le righe successive finché non si trova una riga vuota
+                int next_numeroRiga = numeroRiga + 1;
+                while (getline(file, riga)) {
+                    if (riga.empty()) {
+                        break;
+                    }
+                    cout << "Riga " << next_numeroRiga << ": " << riga << endl;
+                    next_numeroRiga++;
+                }
             }
             numeroRiga++;
         }
         if (!trovata) {
-            cout << "La parola '" << parola << "' non è stata trovata." << endl;
+            cout << "La parola non è stata trovata nel file." << endl;
         }
     }
     return 0;
 }
+
 
