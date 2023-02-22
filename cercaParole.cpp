@@ -39,7 +39,7 @@ int main() {
                 int righePrecedenti = numeroRiga - 1;
                 while (righePrecedenti > 0) {
                     string rigaPrima;
-                    
+
                     for (int i = 1; i < righePrecedenti; i++) {
                         getline(file, rigaPrima);
                     }
@@ -51,13 +51,13 @@ int main() {
                     righePrecedenti--;
                 }
                 // Stampo le righe successive finché non si trova una riga vuota
-                int next_numeroRiga = numeroRiga + 1;
+                int righeSuccessive = numeroRiga + 1;
                 while (getline(file, riga)) {
                     if (riga.empty()) {
                         break;
                     }
-                    cout << "Riga " << next_numeroRiga << ": " << riga << endl;
-                    next_numeroRiga++;
+                    cout << "Riga " << righeSuccessive << ": " << riga << endl;
+                    righeSuccessive++;
                 }
             }
             numeroRiga++;
